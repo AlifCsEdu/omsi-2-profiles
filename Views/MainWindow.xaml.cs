@@ -20,6 +20,9 @@ public sealed partial class MainWindow : Window
         ViewModel = viewModel;
         InitializeComponent();
         
+        // Set window size
+        AppWindow.Resize(new Windows.Graphics.SizeInt32(1200, 800));
+        
         // Initialize the view model
         _ = ViewModel.InitializeAsync();
         
