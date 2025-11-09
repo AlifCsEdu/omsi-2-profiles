@@ -24,7 +24,7 @@ jobs:
       run: dotnet restore
     
     - name: Build Release
-      run: dotnet build -c Release -r win-x64 --self-contained true --no-restore -v:detailed
+      run: dotnet build -c Release --no-restore -v:minimal
     
     - name: Publish self-contained executable
       run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish
