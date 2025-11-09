@@ -30,13 +30,17 @@ public class AddonScanner : IAddonScanner
     public async Task<List<AddonInfo>> ScanVehiclesAsync(string omsi2Path)
     {
         var vehiclesPath = Path.Combine(omsi2Path, "Vehicles");
-        return await ScanAddonDirectoryAsync(vehiclesPath, AddonType.Vehicle, ref _cachedVehicles);
+        var (result, cache) = await ScanAddonDirectoryAsync(vehiclesPath, AddonType.Vehicle, _cachedVehicles);
+        _cachedVehicles = cache;
+        return result;
     }
 
     public async Task<List<AddonInfo>> ScanMapsAsync(string omsi2Path)
     {
         var mapsPath = Path.Combine(omsi2Path, "Maps");
-        return await ScanAddonDirectoryAsync(mapsPath, AddonType.Map, ref _cachedMaps);
+        var (result, cache) = await ScanAddonDirectoryAsync(mapsPath, AddonType.Map, _cachedMaps);
+        _cachedMaps = cache;
+        return result;
     }
 
     public async Task<(List<AddonInfo> Vehicles, List<AddonInfo> Maps)> ScanAllAddonsAsync(string omsi2Path)
@@ -87,10 +91,10 @@ public class AddonScanner : IAddonScanner
         }
     }
 
-    private async Task<List<AddonInfo>> ScanAddonDirectoryAsync(
+    private async Task<(List<AddonInfo> Addons, CachedScanResult? Cache)> ScanAddonDirectoryAsync(
         string directoryPath, 
         AddonType type, 
-        ref CachedScanResult? cache)
+        CachedScanResult? cache)
     {
         // Check cache validity
         await _cacheLock.WaitAsync();
@@ -102,7 +106,7 @@ public class AddonScanner : IAddonScanner
             {
                 _logger.LogDebug("Returning cached {Type} scan results (age: {Age:F1}s)", 
                     type, (DateTime.UtcNow - cache.ScanTime).TotalSeconds);
-                return cache.Addons.ToList(); // Return copy
+                return (cache.Addons.ToList(), cache); // Return copy
             }
         }
         finally
@@ -217,7 +221,7 @@ public class AddonScanner : IAddonScanner
             _logger.LogError(ex, "Failed to scan {Type} directory: {Path}", type, directoryPath);
         }
 
-        return addons;
+        return (addons, cache);
     }
 
     /// <summary>
