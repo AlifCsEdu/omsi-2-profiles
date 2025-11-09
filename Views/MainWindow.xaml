@@ -176,14 +176,12 @@
                                             </Button>
                                             <Button Content="Delete" 
                                                     Click="DeleteProfileButton_Click"
-                                                    Tag="{Binding}"
-                                                    Style="{StaticResource SubtleButtonStyle}">
+                                                    Tag="{Binding}">
                                                 <ToolTipService.ToolTip>
                                                     <ToolTip Content="Delete this profile permanently"/>
                                                 </ToolTipService.ToolTip>
                                             </Button>
                                             <Button Content="Load" 
-                                                    Style="{StaticResource AccentButtonStyle}"
                                                     Click="LoadProfileButton_Click"
                                                     Tag="{Binding}">
                                                 <ToolTipService.ToolTip>

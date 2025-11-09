@@ -108,8 +108,7 @@
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                     
                     <Button Content="Manage Backups" 
-                            Click="ManageBackupsButton_Click"
-                            Style="{StaticResource SubtleButtonStyle}"/>
+                            Click="ManageBackupsButton_Click"/>
                 </StackPanel>
             </StackPanel>
 
