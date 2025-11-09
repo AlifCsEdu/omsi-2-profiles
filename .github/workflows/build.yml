@@ -20,6 +20,9 @@ jobs:
       with:
         dotnet-version: '8.0.x'
     
+    - name: Install WinUI workload
+      run: dotnet workload install microsoft-windows-sdk-net8
+    
     - name: Restore dependencies
       run: dotnet restore
     
