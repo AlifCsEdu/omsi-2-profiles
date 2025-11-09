@@ -15,6 +15,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -26,8 +29,8 @@ jobs:
     - name: Clean build artifacts
       run: dotnet clean -c Release
     
-    - name: Build Release
-      run: dotnet build -c Release --no-restore
+    - name: Build Release with MSBuild
+      run: msbuild OMSIProfileManager.csproj /p:Configuration=Release /p:Platform=x64 /v:minimal
     
     - name: Publish self-contained executable
       run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish
