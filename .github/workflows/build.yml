@@ -1,0 +1,50 @@
+name: Build OMSI Profile Manager
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual triggers
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build Release
+      run: dotnet build -c Release -r win-x64 --self-contained true --no-restore
+    
+    - name: Publish self-contained executable
+      run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish --no-build
+    
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: OMSIProfileManager-Windows-x64-${{ github.sha }}
+        path: publish/
+        retention-days: 30
+    
+    - name: Create release zip
+      run: |
+        cd publish
+        tar -a -cf ../OMSIProfileManager-Windows-x64.zip *
+        cd ..
+    
+    - name: Upload release zip
+      uses: actions/upload-artifact@v4
+      with:
+        name: OMSIProfileManager-Windows-x64-Release
+        path: OMSIProfileManager-Windows-x64.zip
+        retention-days: 90

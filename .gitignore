@@ -79,3 +79,9 @@ $RECYCLE.BIN/
 
 # Mac
 .DS_Store
+
+# Wine prefix (development only)
+.wine/
+
+# Build scripts (not needed in repo)
+*.sh
