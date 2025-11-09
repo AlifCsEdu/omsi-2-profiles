@@ -79,11 +79,11 @@
                             <ToolTip Content="Refresh profile list and rescan addons (Ctrl+R)"/>
                         </ToolTipService.ToolTip>
                     </Button>
-                    <TextBlock Text="{x:Bind ViewModel.VehicleCount, Mode=OneWay}" 
+                    <TextBlock Text="{Binding VehicleCount}" 
                                VerticalAlignment="Center" 
                                Margin="16,0,0,0"/>
                     <TextBlock Text="vehicles," VerticalAlignment="Center"/>
-                    <TextBlock Text="{x:Bind ViewModel.MapCount, Mode=OneWay}" 
+                    <TextBlock Text="{Binding MapCount}" 
                                VerticalAlignment="Center"/>
                     <TextBlock Text="maps detected" VerticalAlignment="Center"/>
                 </StackPanel>
@@ -96,7 +96,7 @@
                     </Grid.ColumnDefinitions>
                     
                     <TextBox Grid.Column="0"
-                             Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              PlaceholderText="Search profiles by name or description..." 
                              Width="400"
                              HorizontalAlignment="Left">
@@ -106,7 +106,7 @@
                     </TextBox>
                     
                     <ComboBox Grid.Column="1" 
-                              SelectedValue="{x:Bind ViewModel.SortOption, Mode=TwoWay}"
+                              SelectedValue="{Binding SortOption, Mode=TwoWay}"
                               SelectionChanged="SortComboBox_SelectionChanged"
                               Width="180"
                               HorizontalAlignment="Right">
@@ -123,7 +123,7 @@
 
                 <!-- Profiles List -->
                 <ScrollViewer Grid.Row="2">
-                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.Profiles, Mode=OneWay}">
+                    <ItemsRepeater ItemsSource="{Binding Profiles}">
                         <ItemsRepeater.ItemTemplate>
                             <DataTemplate>
                                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
@@ -201,10 +201,10 @@
         <!-- Status Bar -->
         <Grid Grid.Row="2" Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16,8">
             <StackPanel Orientation="Horizontal" Spacing="16">
-                <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}" 
+                <ProgressRing IsActive="{Binding IsLoading}" 
                               Width="16" 
                               Height="16"/>
-                <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" 
+                <TextBlock Text="{Binding StatusMessage}" 
                            VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>
