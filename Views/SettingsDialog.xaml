@@ -1,0 +1,146 @@
+<ContentDialog
+    x:Class="OMSIProfileManager.Views.SettingsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Settings"
+    PrimaryButtonText="Save"
+    CloseButtonText="Cancel"
+    DefaultButton="Primary"
+    PrimaryButtonClick="SaveButton_Click">
+
+    <ScrollViewer MaxHeight="600">
+        <StackPanel Spacing="24">
+            <!-- OMSI 2 Path Section -->
+            <StackPanel>
+                <TextBlock Text="OMSI 2 Installation" 
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,12"/>
+                
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Installation Path" 
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,4"/>
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBox x:Name="Omsi2PathTextBox"
+                                 Grid.Column="0"
+                                 PlaceholderText="C:\Program Files (x86)\Steam\steamapps\common\OMSI 2"
+                                 TextChanged="Omsi2PathTextBox_TextChanged"/>
+                        <Button Grid.Column="1" 
+                                Content="Browse" 
+                                Click="BrowseButton_Click"/>
+                        <Button Grid.Column="2" 
+                                Content="Detect" 
+                                Click="DetectButton_Click"
+                                ToolTipService.ToolTip="Auto-detect OMSI 2 installation"/>
+                    </Grid>
+                    
+                    <StackPanel x:Name="PathValidationPanel" 
+                                Orientation="Horizontal" 
+                                Spacing="8"
+                                Margin="0,4,0,0">
+                        <FontIcon x:Name="PathValidationIcon" 
+                                  FontSize="16"
+                                  Foreground="{ThemeResource SystemErrorTextColor}"/>
+                        <TextBlock x:Name="PathValidationText"
+                                   FontSize="12"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Profile Loading Section -->
+            <StackPanel>
+                <TextBlock Text="Profile Loading" 
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,12"/>
+                
+                <StackPanel Spacing="12">
+                    <ToggleSwitch x:Name="AutoBackupToggle"
+                                  Header="Create backup before loading profile"
+                                  OffContent="Backups disabled"
+                                  OnContent="Backups enabled"/>
+                    
+                    <ToggleSwitch x:Name="ConfirmBeforeLoadToggle"
+                                  Header="Show confirmation dialog before loading"
+                                  OffContent="Load immediately"
+                                  OnContent="Confirm first"/>
+                    
+                    <ToggleSwitch x:Name="AutoLaunchToggle"
+                                  Header="Automatically launch OMSI 2 after loading profile"
+                                  OffContent="Manual launch"
+                                  OnContent="Auto-launch"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Notifications Section -->
+            <StackPanel>
+                <TextBlock Text="Notifications" 
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,12"/>
+                
+                <ToggleSwitch x:Name="ShowNotificationsToggle"
+                              Header="Show notifications"
+                              OffContent="Notifications disabled"
+                              OnContent="Notifications enabled"/>
+            </StackPanel>
+
+            <!-- Backup Management Section -->
+            <StackPanel>
+                <TextBlock Text="Backup Management" 
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,12"/>
+                
+                <StackPanel Spacing="8">
+                    <TextBlock x:Name="BackupInfoText"
+                               TextWrapping="Wrap"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    
+                    <Button Content="Manage Backups" 
+                            Click="ManageBackupsButton_Click"
+                            Style="{StaticResource SubtleButtonStyle}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- About Section -->
+            <StackPanel>
+                <TextBlock Text="About" 
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,12"/>
+                
+                <StackPanel Spacing="4">
+                    <TextBlock Text="OMSI 2 Profile Manager"
+                               FontWeight="SemiBold"/>
+                    <TextBlock Text="Version 1.0.0"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="A modern profile management tool for OMSI 2"
+                               TextWrapping="Wrap"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               Margin="0,8,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Loading Indicator -->
+            <StackPanel x:Name="LoadingPanel" 
+                        Orientation="Horizontal" 
+                        Spacing="12"
+                        HorizontalAlignment="Center"
+                        Visibility="Collapsed">
+                <ProgressRing IsActive="True" Width="20" Height="20"/>
+                <TextBlock Text="Detecting OMSI 2..." VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

@@ -1,0 +1,214 @@
+<Window
+    x:Class="OMSIProfileManager.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="OMSI 2 Profile Manager"
+    Width="1200"
+    Height="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Bar -->
+        <Grid Grid.Row="0" Background="{ThemeResource SystemAccentColor}" Padding="16,8">
+            <TextBlock Text="OMSI 2 Profile Manager" 
+                       FontSize="20" 
+                       FontWeight="SemiBold"
+                       Foreground="White"/>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Padding="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Navigation Pane -->
+            <StackPanel Grid.Column="0" Spacing="8">
+                <Button Content="Home" 
+                        Width="180" 
+                        HorizontalAlignment="Left"
+                        Click="HomeButton_Click">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="View all profiles"/>
+                    </ToolTipService.ToolTip>
+                </Button>
+                <Button Content="Settings" 
+                        Width="180" 
+                        HorizontalAlignment="Left"
+                        Click="SettingsButton_Click">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="Configure OMSI 2 path and preferences (Ctrl+,)"/>
+                    </ToolTipService.ToolTip>
+                </Button>
+                <Button Content="About" 
+                        Width="180" 
+                        HorizontalAlignment="Left"
+                        Click="AboutButton_Click">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Content="About OMSI 2 Profile Manager"/>
+                    </ToolTipService.ToolTip>
+                </Button>
+            </StackPanel>
+
+            <!-- Content Area -->
+            <Grid Grid.Column="1" Margin="16,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Toolbar -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,16">
+                    <Button Content="New Profile" Click="NewProfileButton_Click">
+                        <ToolTipService.ToolTip>
+                            <ToolTip Content="Create a new profile (Ctrl+N)"/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                    <Button Content="Refresh" Click="RefreshButton_Click">
+                        <ToolTipService.ToolTip>
+                            <ToolTip Content="Refresh profile list and rescan addons (Ctrl+R)"/>
+                        </ToolTipService.ToolTip>
+                    </Button>
+                    <TextBlock Text="{x:Bind ViewModel.VehicleCount, Mode=OneWay}" 
+                               VerticalAlignment="Center" 
+                               Margin="16,0,0,0"/>
+                    <TextBlock Text="vehicles," VerticalAlignment="Center"/>
+                    <TextBlock Text="{x:Bind ViewModel.MapCount, Mode=OneWay}" 
+                               VerticalAlignment="Center"/>
+                    <TextBlock Text="maps detected" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Search and Sort -->
+                <Grid Grid.Row="1" Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox Grid.Column="0"
+                             Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             PlaceholderText="Search profiles by name or description..." 
+                             Width="400"
+                             HorizontalAlignment="Left">
+                        <ToolTipService.ToolTip>
+                            <ToolTip Content="Type to filter profiles (Ctrl+F to focus)"/>
+                        </ToolTipService.ToolTip>
+                    </TextBox>
+                    
+                    <ComboBox Grid.Column="1" 
+                              SelectedValue="{x:Bind ViewModel.SortOption, Mode=TwoWay}"
+                              SelectionChanged="SortComboBox_SelectionChanged"
+                              Width="180"
+                              HorizontalAlignment="Right">
+                        <ToolTipService.ToolTip>
+                            <ToolTip Content="Change sort order"/>
+                        </ToolTipService.ToolTip>
+                        <ComboBoxItem Content="Sort by Name" IsSelected="True" Tag="Name"/>
+                        <ComboBoxItem Content="Sort by Date Created" Tag="DateCreated"/>
+                        <ComboBoxItem Content="Sort by Last Used" Tag="LastUsed"/>
+                        <ComboBoxItem Content="Sort by Vehicle Count" Tag="VehicleCount"/>
+                        <ComboBoxItem Content="Sort by Map Count" Tag="MapCount"/>
+                    </ComboBox>
+                </Grid>
+
+                <!-- Profiles List -->
+                <ScrollViewer Grid.Row="2">
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.Profiles, Mode=OneWay}">
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="16"
+                                        Margin="0,0,0,12">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Grid.Column="0">
+                                            <TextBlock Text="{Binding Name}" 
+                                                       FontSize="18" 
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Description}" 
+                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                       Margin="0,4,0,0"/>
+                                            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,8,0,0">
+                                                <TextBlock>
+                                                    <Run Text="{Binding Vehicles.Count}"/>
+                                                    <Run Text="vehicles"/>
+                                                </TextBlock>
+                                                <TextBlock>
+                                                    <Run Text="{Binding Maps.Count}"/>
+                                                    <Run Text="maps"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="1" 
+                                                    Orientation="Horizontal" 
+                                                    Spacing="8">
+                                            <Button Content="Duplicate" 
+                                                    Click="DuplicateProfileButton_Click"
+                                                    Tag="{Binding}">
+                                                <ToolTipService.ToolTip>
+                                                    <ToolTip Content="Create a copy of this profile"/>
+                                                </ToolTipService.ToolTip>
+                                            </Button>
+                                            <Button Content="Edit" 
+                                                    Click="EditProfileButton_Click"
+                                                    Tag="{Binding}">
+                                                <ToolTipService.ToolTip>
+                                                    <ToolTip Content="Edit profile name, description, and addon selection"/>
+                                                </ToolTipService.ToolTip>
+                                            </Button>
+                                            <Button Content="Delete" 
+                                                    Click="DeleteProfileButton_Click"
+                                                    Tag="{Binding}"
+                                                    Style="{StaticResource SubtleButtonStyle}">
+                                                <ToolTipService.ToolTip>
+                                                    <ToolTip Content="Delete this profile permanently"/>
+                                                </ToolTipService.ToolTip>
+                                            </Button>
+                                            <Button Content="Load" 
+                                                    Style="{StaticResource AccentButtonStyle}"
+                                                    Click="LoadProfileButton_Click"
+                                                    Tag="{Binding}">
+                                                <ToolTipService.ToolTip>
+                                                    <ToolTip Content="Load this profile into OMSI 2"/>
+                                                </ToolTipService.ToolTip>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+
+        <!-- Status Bar -->
+        <Grid Grid.Row="2" Background="{ThemeResource LayerFillColorDefaultBrush}" Padding="16,8">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <ProgressRing IsActive="{x:Bind ViewModel.IsLoading, Mode=OneWay}" 
+                              Width="16" 
+                              Height="16"/>
+                <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,122 @@
+<ContentDialog
+    x:Class="OMSIProfileManager.Views.NewProfileDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="New Profile"
+    PrimaryButtonText="Create"
+    CloseButtonText="Cancel"
+    DefaultButton="Primary"
+    PrimaryButtonClick="CreateButton_Click">
+
+    <ScrollViewer MaxHeight="600">
+        <StackPanel Spacing="16">
+            <!-- Profile Name -->
+            <StackPanel>
+                <TextBlock Text="Profile Name" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox x:Name="ProfileNameTextBox"
+                         PlaceholderText="Enter profile name..."
+                         TextChanged="ProfileNameTextBox_TextChanged"/>
+                <TextBlock x:Name="NameErrorText"
+                           Foreground="{ThemeResource SystemErrorTextColor}"
+                           FontSize="12"
+                           Margin="0,4,0,0"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+            <!-- Profile Description -->
+            <StackPanel>
+                <TextBlock Text="Description (Optional)" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,4"/>
+                <TextBox x:Name="ProfileDescriptionTextBox"
+                         PlaceholderText="Enter profile description..."
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Height="80"/>
+            </StackPanel>
+
+            <!-- Vehicles Section -->
+            <StackPanel>
+                <Grid Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Vehicles" 
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                        <Button Content="Select All" 
+                                Click="SelectAllVehicles_Click"
+                                Style="{StaticResource SubtleButtonStyle}"/>
+                        <Button Content="Clear" 
+                                Click="ClearVehicles_Click"
+                                Style="{StaticResource SubtleButtonStyle}"/>
+                    </StackPanel>
+                </Grid>
+                
+                <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        MaxHeight="200">
+                    <ScrollViewer>
+                        <StackPanel x:Name="VehiclesPanel" Padding="8"/>
+                    </ScrollViewer>
+                </Border>
+                <TextBlock x:Name="VehicleCountText"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           FontSize="12"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Maps Section -->
+            <StackPanel>
+                <Grid Margin="0,0,0,8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Maps" 
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                        <Button Content="Select All" 
+                                Click="SelectAllMaps_Click"
+                                Style="{StaticResource SubtleButtonStyle}"/>
+                        <Button Content="Clear" 
+                                Click="ClearMaps_Click"
+                                Style="{StaticResource SubtleButtonStyle}"/>
+                    </StackPanel>
+                </Grid>
+                
+                <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        MaxHeight="200">
+                    <ScrollViewer>
+                        <StackPanel x:Name="MapsPanel" Padding="8"/>
+                    </ScrollViewer>
+                </Border>
+                <TextBlock x:Name="MapCountText"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           FontSize="12"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Loading Indicator -->
+            <StackPanel x:Name="LoadingPanel" 
+                        Orientation="Horizontal" 
+                        Spacing="12"
+                        HorizontalAlignment="Center"
+                        Visibility="Collapsed">
+                <ProgressRing IsActive="True" Width="20" Height="20"/>
+                <TextBlock Text="Loading addons..." VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>
