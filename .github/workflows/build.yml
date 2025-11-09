@@ -26,8 +26,21 @@ jobs:
     - name: Clean build artifacts
       run: dotnet clean -c Release
     
-    - name: Build Release
-      run: dotnet build -c Release --no-restore
+    - name: Build Release with diagnostics
+      run: |
+        dotnet build -c Release --no-restore -v:diag > build.log 2>&1 || true
+        Write-Host "Build failed, checking for input.json..."
+        if (Test-Path "obj/Release/net8.0-windows10.0.22621.0/input.json") {
+          Write-Host "=== input.json content ==="
+          Get-Content "obj/Release/net8.0-windows10.0.22621.0/input.json"
+        }
+        if (Test-Path "obj/Release/net8.0-windows10.0.22621.0/output.json") {
+          Write-Host "=== output.json content ==="
+          Get-Content "obj/Release/net8.0-windows10.0.22621.0/output.json"
+        }
+        Write-Host "=== Last 100 lines of build log ==="
+        Get-Content build.log -Tail 100
+        exit 1
     
     - name: Publish self-contained executable
       run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish
