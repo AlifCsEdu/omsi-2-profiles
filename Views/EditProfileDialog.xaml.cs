@@ -87,20 +87,20 @@ public sealed partial class EditProfileDialog : ContentDialog
         VehiclesPanel.Children.Clear();
         _vehicleCheckboxes.Clear();
 
-        foreach (var vehicle in _availableVehicles.OrderBy(v => v.Name))
+        foreach (var vehicle in _availableVehicles.OrderBy(v => v.DisplayName))
         {
             var checkbox = new CheckBox
             {
-                Content = vehicle.Name,
-                Tag = vehicle.Path,
+                Content = vehicle.DisplayName,
+                Tag = vehicle.FolderName,
                 Margin = new Thickness(0, 4, 0, 4),
-                IsChecked = _originalProfile.Vehicles.Contains(vehicle.Path)
+                IsChecked = _originalProfile.Vehicles.Contains(vehicle.FolderName)
             };
             checkbox.Checked += (s, e) => UpdateCounts();
             checkbox.Unchecked += (s, e) => UpdateCounts();
 
             VehiclesPanel.Children.Add(checkbox);
-            _vehicleCheckboxes[vehicle.Path] = checkbox;
+            _vehicleCheckboxes[vehicle.FolderName] = checkbox;
         }
     }
 
@@ -109,20 +109,20 @@ public sealed partial class EditProfileDialog : ContentDialog
         MapsPanel.Children.Clear();
         _mapCheckboxes.Clear();
 
-        foreach (var map in _availableMaps.OrderBy(m => m.Name))
+        foreach (var map in _availableMaps.OrderBy(m => m.DisplayName))
         {
             var checkbox = new CheckBox
             {
-                Content = map.Name,
-                Tag = map.Path,
+                Content = map.DisplayName,
+                Tag = map.FolderName,
                 Margin = new Thickness(0, 4, 0, 4),
-                IsChecked = _originalProfile.Maps.Contains(map.Path)
+                IsChecked = _originalProfile.Maps.Contains(map.FolderName)
             };
             checkbox.Checked += (s, e) => UpdateCounts();
             checkbox.Unchecked += (s, e) => UpdateCounts();
 
             MapsPanel.Children.Add(checkbox);
-            _mapCheckboxes[map.Path] = checkbox;
+            _mapCheckboxes[map.FolderName] = checkbox;
         }
     }
 
@@ -196,8 +196,7 @@ public sealed partial class EditProfileDialog : ContentDialog
                 Name = name,
                 Description = description,
                 Vehicles = selectedVehicles,
-                Maps = selectedMaps,
-                LastModified = DateTime.UtcNow
+                Maps = selectedMaps
             };
 
             await _profileManager.UpdateProfileAsync(updatedProfile);

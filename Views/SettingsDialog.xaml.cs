@@ -80,7 +80,7 @@ public sealed partial class SettingsDialog : ContentDialog
             return;
         }
 
-        var result = _pathDetector.ValidateOmsi2Path(path);
+        var result = _pathDetector.ValidateWithDetails(path);
         
         if (result.IsValid)
         {
@@ -108,7 +108,7 @@ public sealed partial class SettingsDialog : ContentDialog
 
         try
         {
-            var backups = await _backupManager.ListBackupsAsync(omsi2Path);
+            var backups = await _backupManager.ListBackupsAsync();
             BackupInfoText.Text = $"{backups.Count} backup(s) available";
         }
         catch (Exception ex)
@@ -150,26 +150,18 @@ public sealed partial class SettingsDialog : ContentDialog
         {
             LoadingPanel.Visibility = Visibility.Visible;
 
-            var result = await Task.Run(() => _pathDetector.DetectOmsi2Path());
+            var path = await _pathDetector.DetectOMSI2PathAsync();
             
-            if (result.IsValid && result.Path != null)
+            if (path != null)
             {
-                Omsi2PathTextBox.Text = result.Path;
-                await UpdateBackupInfoAsync(result.Path);
+                Omsi2PathTextBox.Text = path;
+                await UpdateBackupInfoAsync(path);
 
-                var method = result.DetectionMethod switch
-                {
-                    "Registry" => "Found via Windows Registry",
-                    "Steam" => "Found via Steam library",
-                    "CommonPath" => "Found in common location",
-                    _ => "Found"
-                };
-
-                await ShowInfoAsync($"OMSI 2 detected successfully!\n\n{method}\n{result.Path}");
+                await ShowInfoAsync($"OMSI 2 detected successfully!\n\n{path}");
             }
             else
             {
-                await ShowErrorAsync($"Could not auto-detect OMSI 2 installation.\n\n{result.ErrorMessage}\n\nPlease use the Browse button to locate it manually.");
+                await ShowErrorAsync("Could not auto-detect OMSI 2 installation.\n\nPlease use the Browse button to locate it manually.");
             }
         }
         catch (Exception ex)
@@ -194,7 +186,7 @@ public sealed partial class SettingsDialog : ContentDialog
 
         try
         {
-            var backups = await _backupManager.ListBackupsAsync(path);
+            var backups = await _backupManager.ListBackupsAsync();
             
             var content = new StackPanel { Spacing = 8 };
             
@@ -276,7 +268,7 @@ public sealed partial class SettingsDialog : ContentDialog
             // Validate path if provided
             if (!string.IsNullOrEmpty(path))
             {
-                var result = _pathDetector.ValidateOmsi2Path(path);
+                var result = _pathDetector.ValidateWithDetails(path);
                 if (!result.IsValid)
                 {
                     args.Cancel = true;
