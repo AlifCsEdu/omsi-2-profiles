@@ -23,8 +23,11 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     
+    - name: Clean build artifacts
+      run: dotnet clean -c Release
+    
     - name: Build Release
-      run: dotnet build -c Release --no-restore -v:minimal
+      run: dotnet build -c Release --no-restore
     
     - name: Publish self-contained executable
       run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -o publish
